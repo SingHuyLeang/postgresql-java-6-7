@@ -15,7 +15,7 @@ public class Product {
     private String image;
     private int idOwner;
 
-    public Product(int id, String name, int qty, double price, int discount, double total, String image) {
+    public Product(String name, int qty, double price, int discount, double total, String image,int idOwner) {
         this.id = id;
         this.name = name;
         this.qty = qty;
@@ -23,5 +23,6 @@ public class Product {
         this.discount = discount;
         this.total = total;
         this.image = image;
+        this.idOwner = idOwner;
     }
 }

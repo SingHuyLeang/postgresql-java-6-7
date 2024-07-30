@@ -18,7 +18,7 @@ public class Device {
     private final Set<String> signedInDevices;
     private final Set<String> owners;
     
-    public int _ownerId;
+    public static int _ownerId;
     
     public Device() {
         signedInDevices = loadDevicesFromStorage();

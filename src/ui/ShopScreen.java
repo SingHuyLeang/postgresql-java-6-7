@@ -1,13 +1,16 @@
 package ui;
 
+import data.Product;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import main.Device;
+import service.ShopDatabase;
 
 public class ShopScreen extends javax.swing.JPanel {
-
+    
+    private final ShopDatabase db = new ShopDatabase();
     String imagePath = "";
 
     public ShopScreen() {
@@ -276,12 +279,11 @@ public class ShopScreen extends javax.swing.JPanel {
             int discount = (int) spDiscount.getValue();
             double total = Double.parseDouble(txtTotal.getText());
             
-            System.out.println(name);
-            System.out.println(price);
-            System.out.println(qty);
-            System.out.println(discount);
-            System.out.println(total);
-            System.out.println(imagePath);
+            if (db.addProduct(new Product(name, qty, price, discount, total, imagePath, Device._ownerId))) {
+                System.out.println("Add Success");
+            } else {
+                System.err.println("Add failed");
+            }
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
