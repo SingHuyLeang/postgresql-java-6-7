@@ -35,7 +35,8 @@ public final class Main extends JFrame implements UICallBack{
 
         setSize(new java.awt.Dimension(1014, 637));
         setLocationRelativeTo(null);
-                
+           
+        // device.signOut(Device.getDeviceName(), String.valueOf(Device._ownerId));
         if (!device.isSignedIn(Device.getDeviceName())) {
             init(new AuthenticationScreen(this));
         } else {

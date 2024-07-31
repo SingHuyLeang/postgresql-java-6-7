@@ -1,21 +1,60 @@
 package ui;
 
 import data.Product;
+import dto.ProductDto;
 import java.awt.Image;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.table.DefaultTableModel;
 import main.Device;
 import service.ShopDatabase;
 
 public class ShopScreen extends javax.swing.JPanel {
     
     private final ShopDatabase db = new ShopDatabase();
+    
+    List<ProductDto> products;
+    
     String imagePath = "";
 
     public ShopScreen() {
+        Device device = new Device();
         initComponents();
         setTotal(spPrice, spQty, spDiscount);
+        refress();
+    }
+    
+    private void refress() {
+        products = db.getProducts(Device._ownerId);
+        DefaultTableModel model = (DefaultTableModel) tblProduct.getModel();
+        model.setRowCount(0);
+        if (!products.isEmpty()) {
+            products.forEach(product -> {
+                Object[] row = {
+                    product.getId(),
+                    product.getName(),
+                    product.getQty(),
+                    product.getPrice(),
+                    product.getDiscount(),
+                    product.getTotal(),
+                    product.getImage(),
+                    product.getOwner(),
+                };
+                model.addRow(row);
+            });
+        } else {
+            System.out.println("Products is empty");
+        }
+        
+        txtName.setText("");
+        spPrice.setValue(0);
+        spQty.setValue(1);
+        spDiscount.setValue(0);
+        txtTotal.setText("");
+        lbImage.setIcon(null);
+        imagePath = "";
     }
 
     private void setTotal(JSpinner spPrice, JSpinner spQty, JSpinner spDiscount) {
@@ -45,7 +84,7 @@ public class ShopScreen extends javax.swing.JPanel {
         spDiscount = new javax.swing.JSpinner();
         btnChooseImage = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblProduct = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
@@ -104,7 +143,7 @@ public class ShopScreen extends javax.swing.JPanel {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -115,7 +154,7 @@ public class ShopScreen extends javax.swing.JPanel {
                 "Id", "Name", "Qty", "Price", "Discount", "Total", "Image", "Owner"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblProduct);
 
         btnAdd.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         btnAdd.setText("Add");
@@ -280,7 +319,7 @@ public class ShopScreen extends javax.swing.JPanel {
             double total = Double.parseDouble(txtTotal.getText());
             
             if (db.addProduct(new Product(name, qty, price, discount, total, imagePath, Device._ownerId))) {
-                System.out.println("Add Success");
+                refress();
             } else {
                 System.err.println("Add failed");
             }
@@ -302,11 +341,11 @@ public class ShopScreen extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbImage;
     private javax.swing.JSpinner spDiscount;
     private javax.swing.JSpinner spPrice;
     private javax.swing.JSpinner spQty;
+    private javax.swing.JTable tblProduct;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables

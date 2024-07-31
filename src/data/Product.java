@@ -2,6 +2,7 @@ package data;
 
 import lombok.*;
 
+// Entity
 @Getter
 @Setter
 @AllArgsConstructor

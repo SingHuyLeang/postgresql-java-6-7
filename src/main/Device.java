@@ -18,12 +18,21 @@ public class Device {
     private final Set<String> signedInDevices;
     private final Set<String> owners;
     
-    public static int _ownerId;
+    public static int _ownerId = -1;
     
     public Device() {
         signedInDevices = loadDevicesFromStorage();
         owners = loadOwnerFromStorage() ;
-        _ownerId = Integer.parseInt(owners.toArray()[0].toString());
+        try {
+            _ownerId = Integer.parseInt(owners.toArray()[0].toString());
+            if (_ownerId != -1) {
+                System.out.println("this owner " + _ownerId + " is staying.");
+            } else {
+                System.err.println("this owner " + _ownerId + " is not current owner.");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("NumberFormatException get owner id at first time has error by : " + e.getMessage());
+        }
     }
     
     public void signIn(String deviceName,String ownerId) {
